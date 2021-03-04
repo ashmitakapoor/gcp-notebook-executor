@@ -10,7 +10,7 @@ fi
 
 if [[ ! -z $(command -v conda) ]]; then
   source /opt/conda/bin/activate base
-  sudo /opt/conda/bin/pip install -U papermill==0.19.1
+  sudo /opt/conda/bin/pip install -U papermill
  fi
 
 readonly INPUT_NOTEBOOK_GCS_FILE=$(curl http://metadata.google.internal/computeMetadata/v1/instance/attributes/input_notebook -H "Metadata-Flavor: Google")
@@ -44,8 +44,8 @@ if [[ "${PAPERMILL_EXIT_CODE}" -ne 0 ]]; then
   touch "${TEMPORARY_NOTEBOOK_FOLDER}/FAILED"
 else
   cd "${TEMPORARY_NOTEBOOK_FOLDER}"
-  jupyter nbconvert "${TEMPORARY_NOTEBOOK_PATH}"
-  jupyter nbconvert "${TEMPORARY_NOTEBOOK_PATH}" --output "${OUTPUT_NOTEBOOK_CLEAN_NAME}" --TemplateExporter.exclude_input=True
+  jupyter nbconvert --to="notebook" "${TEMPORARY_NOTEBOOK_PATH}"
+  jupyter nbconvert --to="notebook" "${TEMPORARY_NOTEBOOK_PATH}" --output "${OUTPUT_NOTEBOOK_CLEAN_NAME}" --TemplateExporter.exclude_input=True
 fi
 
 # For backward compitability.
